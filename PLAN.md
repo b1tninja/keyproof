@@ -227,24 +227,33 @@ changes trust decisions:
 
 ## Obligations
 
-| Id | Spec | Status | Where | Evidence |
-|---|---|---|---|---|
-| `kp.artifact` | this document | [ ] | `format` | `test_canonical_bytes_are_reproducible` |
-| `kp.verify.raw` | Model I3 | [ ] | `verify` | `test_verifies_over_stored_bytes` |
-| `kp.oracle-shape` | this document | [ ] | `admit` | `test_der_and_jwt_shaped_submissions_rejected` |
-| `kp.spki-bind` | this document | [ ] | `admit` | `test_artifact_bound_to_target_spki` |
-| `kp.log-append` | RFC 9162 section 2.1 | [ ] | `log` | `test_checkpoint_and_inclusion_proof` |
-| `kp.mirror` | Model I9 | [ ] | `mirror` | `test_external_copy_matches` |
-| `kp.no-expiry` | this document | [ ] | `list` | `test_entry_never_expires` |
-| `kp.feed-signed` | PROTOCOL.krl section 6 | [ ] | `feed` | `test_feed_signature_verifies_offline` |
-| `kp.ext-critical` | PROTOCOL.krl sections 2.5, 5 | [ ] | `format` | `test_unknown_critical_extension_fails_open_is_impossible` |
-| `kp.pkix-hook` | RFC 5280 section 6 | [ ] | `pkix` integration | `test_chain_with_listed_spki_is_rejected` |
-| `kp.ssh-export` | PROTOCOL.krl sections 3, 4 | [ ] | `export` | `test_krl_loads_under_openssh_9_and_later` |
-| `kp.ssh-sshsig` | PROTOCOL.krl section 6 caveat | [ ] | `export` | `test_export_uses_detached_sshsig_not_embedded_signature` |
-| `kp.ordered-hashes` | PROTOCOL.krl section 4 | [ ] | `export` | `test_hashes_sorted_big_endian` |
-| `kp.no-key-storage` | this document | [ ] | `admit` | `test_endpoint_never_stores_private_material` |
-| `kp.claims-discipline` | Model section 9 | [ ] | copy, API | review: no attribution, no causation, no "all keys" claim |
-| `kp.probe-silence` | this document | [ ] | `admit` | `test_rejected_submission_reveals_nothing` |
+| Id | Spec | Status | Where | Evidence | Rung |
+|---|---|---|---|---|---|
+| `kp.artifact` | this document | [ ] | `format` | `tests/test_format.py::test_canonical_bytes_are_reproducible` (to be written) | pre-ladder |
+| `kp.verify.raw` | `certledger/TRUST-MODEL.md` I3 | [ ] | `verify` | `tests/test_verify.py::test_verifies_over_stored_bytes` (to be written) | pre-ladder |
+| `kp.oracle-shape` | this document | [ ] | `admit` | `tests/test_admit.py::test_der_and_jwt_shaped_submissions_rejected` (to be written) | pre-ladder |
+| `kp.spki-bind` | this document | [ ] | `admit` | `tests/test_admit.py::test_artifact_bound_to_target_spki` (to be written) | pre-ladder |
+| `kp.log-append` | RFC 9162 section 2.1 | [ ] | `log` | `tests/test_log.py::test_checkpoint_and_inclusion_proof` (to be written) | pre-ladder |
+| `kp.mirror` | `certledger/TRUST-MODEL.md` I9 | [ ] | `mirror` | `tests/test_mirror.py::test_external_copy_matches` (to be written) | pre-ladder |
+| `kp.no-expiry` | this document | [ ] | `list` | `tests/test_list.py::test_entry_never_expires` (to be written) | pre-ladder |
+| `kp.feed-signed` | PROTOCOL.krl section 6 | [ ] | `feed` | `tests/test_feed.py::test_feed_signature_verifies_offline` (to be written) | rung 2 |
+| `kp.ext-critical` | PROTOCOL.krl sections 2.5, 5 | [ ] | `format` | `tests/test_format.py::test_unknown_critical_extension_fails_open_is_impossible` (to be written) | rung 3 |
+| `kp.pkix-hook` | RFC 5280 section 6 | [ ] | `pkix` integration | `test_chain_with_listed_spki_is_rejected` (to be written, in `pkix`'s suite) | rung 1 |
+| `kp.ssh-export` | PROTOCOL.krl sections 3, 4 | [ ] | `export` | `tests/test_export.py::test_krl_loads_under_openssh_9_and_later` (to be written) | rung 3 |
+| `kp.ssh-sshsig` | PROTOCOL.krl section 6 caveat | [ ] | `export` | `tests/test_export.py::test_export_uses_detached_sshsig_not_embedded_signature` (to be written) | rung 3 |
+| `kp.ordered-hashes` | PROTOCOL.krl section 4 | [ ] | `export` | `tests/test_export.py::test_hashes_sorted_big_endian` (to be written) | rung 3 |
+| `kp.no-key-storage` | this document | [ ] | `admit` | `tests/test_admit.py::test_endpoint_never_stores_private_material` (to be written) | pre-ladder |
+| `kp.claims-discipline` | `certledger/TRUST-MODEL.md` section 9 | [ ] | copy, API | review: no attribution, no causation, no "all keys" claim | pre-ladder |
+| `kp.probe-silence` | this document | [ ] | `admit` | `tests/test_admit.py::test_rejected_submission_reveals_nothing` (to be written) | pre-ladder |
+
+`Model` in a Spec cell used to mean `certledger/TRUST-MODEL.md` without saying so; the cells now name it. The
+`Rung` column places each row on the adoption ladder above: `kp.pkix-hook` (rung 1, "`pkix` rejects any chain
+containing a listed SPKI"), `kp.feed-signed` (rung 2, the "signed, machine-readable, transparent feed") and the
+KRL rows (rung 3) quote it; `kp.ordered-hashes` at rung 3 and the register preconditions, marked `pre-ladder` because
+they must hold before rung 1, are judgements. No test exists for any row, because this directory holds no code; each Evidence name is the test
+that would close it, marked `(to be written)`. The `PROTOCOL.krl` cells cite sections without a pinned
+revision: the prior-art table read revision 1.7, and pinning the cells to it waits on the owner confirming
+that revision.
 
 ## Non-goals
 
